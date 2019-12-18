@@ -83,7 +83,7 @@ class OcentricFactory(object):
             planetaryOcentricTriaxial.addRecord(TriaxialOcentricMetadata.ELLIPSOIDE_NAME, recordIAU.getElement(Metadata.BODY) + "_" + str(pubYear) + "_" + authorityName)
             planetaryOcentricTriaxial.addRecord(TriaxialOcentricMetadata.MEAN, float(recordIAU.getElement(Metadata.MEAN)))
             planetaryOcentricTriaxial.addRecord(TriaxialOcentricMetadata.AUTHORITY_NAME, authorityName)
-            planetaryOcentricTriaxial.addRecord(TriaxialOcentricMetadata.AUTHORITY_CODE, str(pubYear) + ":" + str(gisCode))
+            planetaryOcentricTriaxial.addRecord(TriaxialOcentricMetadata.AUTHORITY_CODE, "IAU:" + str(pubYear) + ":" + str(gisCode))
             planetaryOcentricTriaxial.addRecord(TriaxialOcentricMetadata.SEMI_MAJOR, float(recordIAU.getElement(Metadata.SEMI_MAJOR)))
             planetaryOcentricTriaxial.addRecord(TriaxialOcentricMetadata.SEMI_MINOR, float(recordIAU.getElement(Metadata.SEMI_MINOR)))
             planetaryOcentricTriaxial.addRecord(TriaxialOcentricMetadata.AXIS_B, float(recordIAU.getElement(Metadata.AXIS_B)))            
@@ -97,7 +97,7 @@ class OcentricFactory(object):
             planetaryOcentric.addRecord(OcentricMetadata.RADIUS, float(recordIAU.getElement(Metadata.MEAN)))
             planetaryOcentric.addRecord(OcentricMetadata.INVERSE_FLATTENING, WKT.computeInverseFlattening(recordIAU.getElement(Metadata.SEMI_MAJOR), recordIAU.getElement(Metadata.SEMI_MINOR)))
             planetaryOcentric.addRecord(OcentricMetadata.AUTHORITY_NAME, authorityName)
-            planetaryOcentric.addRecord(OcentricMetadata.AUTHORITY_CODE, str(pubYear) + ":" + str(gisCode))
+            planetaryOcentric.addRecord(OcentricMetadata.AUTHORITY_CODE, "IAU:" + str(pubYear) + ":" + str(gisCode))
             result = OcentricWKT(planetaryOcentric) 
 
         logger.debug("Exitin from OcentricFactory.create")

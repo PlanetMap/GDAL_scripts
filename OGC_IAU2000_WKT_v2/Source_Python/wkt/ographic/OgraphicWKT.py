@@ -95,4 +95,29 @@ class OgraphicWKT(WKT) :
         )
 
         logger.debug("Exiting from ographicWKT.getWkt")
-        return wkt        
+        return wkt   
+
+    def getRecord(self):
+        """
+        Returns the record format 
+
+        :return: the WKT
+        :rtype: str
+         """
+        logger.debug("Entering in ocentricWKT.getRecord")
+
+
+        record = {
+            'type':'OGRAPHIC',
+            OgraphicMetadata.GEO_GCS_NAME.value: self.getGeoGcsName(),
+            OgraphicMetadata.DATUM_NAME.value: self.getDatumName(),
+            OgraphicMetadata.ELLIPSOIDE_NAME.value: self.getSpheroidName(),
+            OgraphicMetadata.RADIUS.value: self.getRadius(),
+            OgraphicMetadata.INVERSE_FLATTENING.value: self.getInverseFlattening(),
+            OgraphicMetadata.AUTHORITY_NAME.value: self.getAuthorityName(),
+            OgraphicMetadata.AUTHORITY_CODE.value: self.getAuthorityCode(),  
+            OgraphicMetadata.LONGITUDE_ORDER.value: self.__longitudeAxisOrder.value
+        }
+
+        logger.debug("Exiting from ocentricWKT.getRecord")
+        return record              

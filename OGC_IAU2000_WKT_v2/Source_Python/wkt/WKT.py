@@ -187,6 +187,10 @@ class WKT(object):
         """
         raise NotImplementedError
 
+    @abc.abstractmethod
+    def getRecord(self):
+        raise NotImplementedError    
+
     @staticmethod
     def computeInverseFlattening(semiMajorAxis, semiMinorAxis):
         """

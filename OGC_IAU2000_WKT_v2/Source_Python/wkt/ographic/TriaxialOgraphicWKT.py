@@ -97,4 +97,29 @@ class TriaxialOgraphicWKT(WKT):
         )
 
         logger.debug("Exiting from triaxialOgraphicWKT.getWkt")
-        return wkt          
+        return wkt   
+
+    def getRecord(self):
+        """
+        Returns the Record format 
+
+        :return: the WKT
+        :rtype: str
+         """
+        logger.debug("Entering in ocentricWKT.getRecord")
+
+
+        record = {
+            'type':'TRIAXIAL_OGRAPHIC',
+            TriaxialOgraphicMetadata.GEO_GCS_NAME.value: self.getGeoGcsName(),
+            TriaxialOgraphicMetadata.DATUM_NAME.value: self.getDatumName(),
+            TriaxialOgraphicMetadata.ELLIPSOIDE_NAME.value: self.getSpheroidName(),
+            TriaxialOgraphicMetadata.SEMI_MAJOR.value: self.getRadius(),
+            TriaxialOgraphicMetadata.AXIS_B.value: self.__axisB,
+            TriaxialOgraphicMetadata.SEMI_MINOR.value: self.__minorAxis,
+            TriaxialOgraphicMetadata.AUTHORITY_NAME.value: self.getAuthorityName(),
+            TriaxialOgraphicMetadata.AUTHORITY_CODE.value: self.getAuthorityCode()            
+        }
+
+        logger.debug("Exiting from ocentricWKT.getRecord")
+        return record                 

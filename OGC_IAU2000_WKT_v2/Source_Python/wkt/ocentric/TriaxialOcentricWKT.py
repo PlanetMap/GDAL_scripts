@@ -86,7 +86,7 @@ class TriaxialOcentricWKT(WKT):
 
     def getWKT(self):
         """
-        Returns the CRS based on longitude/latitude
+        Returns the WKT format
 
         :return: the WKT
         :rtype: str
@@ -98,6 +98,31 @@ class TriaxialOcentricWKT(WKT):
             self.getRadius(), self.getAuthorityName(), self.getAuthorityCode()
         )
         logger.debug("Exiting from TriaxialOcentricWKT.getWkt")
-        return wkt               
+        return wkt    
+
+    def getRecord(self):
+        """
+        Returns the CSV format 
+
+        :return: the WKT
+        :rtype: str
+         """
+        logger.debug("Entering in ocentricWKT.getRecord")
+
+
+        record = {
+            'type':'TRIAXIAL_OCENTRIC',
+            TriaxialOcentricMetadata.GEO_GCS_NAME.value: self.getGeoGcsName(),
+            TriaxialOcentricMetadata.DATUM_NAME.value: self.getDatumName(),
+            TriaxialOcentricMetadata.ELLIPSOIDE_NAME.value: self.getSpheroidName(),
+            TriaxialOcentricMetadata.SEMI_MAJOR.value: self.getRadius(),
+            TriaxialOcentricMetadata.AXIS_B.value: self.__axisB,
+            TriaxialOcentricMetadata.SEMI_MINOR.value: self.__minorAxis,
+            TriaxialOcentricMetadata.MEAN.value: self.getRadius(),
+            TriaxialOcentricMetadata.AUTHORITY_NAME.value: self.getAuthorityName(),
+            TriaxialOcentricMetadata.AUTHORITY_CODE.value: self.getAuthorityCode()            
+        }
+        logger.debug("Exiting from ocentricWKT.getRecord")
+        return record                     
 
     

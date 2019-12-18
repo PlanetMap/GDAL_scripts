@@ -359,7 +359,7 @@ class IAUCatalog:
             planetaryProjected.addRecord(ProjectedMetadata.PROJECTION_ENUM, projectionEnum)
             planetaryProjected.addRecord(ProjectedMetadata.PROJECTION_NAME, recordIAU.getElement(Metadata.BODY) + "_" + projectionEnum.value['projection'])
             planetaryProjected.addRecord(ProjectedMetadata.AUTHORITY_NAME, self.__group)
-            planetaryProjected.addRecord(ProjectedMetadata.AUTHORITY_CODE, self.__theYear + ":" + str(gisCode))           
+            planetaryProjected.addRecord(ProjectedMetadata.AUTHORITY_CODE, "IAU:" + self.__theYear + ":" + str(gisCode))           
             ocentricProjection = ProjectedWKT(planetaryProjected, ocentric)
             # save projection
             crs.append({
@@ -452,6 +452,79 @@ class IAUCatalog:
             if fileToOutput is not sys.stdout:
                 fileToOutput.close()
 
+    @staticmethod
+    def saveAsCSV(crss, filename=None):
+        import csv
+
+        if filename is None:
+            filename = crss[0]['wkt'].getAuthorityName() + "_v4"    
+        
+        filesToOutput = {
+            "OCENTRIC": filename+"_ocentric",
+            "OGRAPHIC": filename+"_ographic",
+            "TRIAXIAL_OCENTRIC": filename+"_triaxial_ocentric",
+            "TRIAXIAL_OGRAPHIC": filename+"_triaxial_ographic",
+            "OCENTRIC_PROJECTED": filename+"_ocentric_projected",
+            "OGRAPHIC_PROJECTED": filename+"_ographic_projected",
+            "TRIAXIAL_OCENTRIC_PROJECTED": filename+"_triaxial_ocentric_projected",
+            "TRIAXIAL_OGRAPHIC_PROJECTED": filename+"_triaxial_ographic_projected"
+        }
+
+        if filename is not sys.stdout:
+            for crsType in filesToOutput:
+                filesToOutput[crsType] = open(filesToOutput[crsType], 'w')
+        else:
+            fileToOutput = filename
+
+        try:
+            authorityName = crss[0]['wkt'].getAuthorityName()
+            authorityCode = crss[0]['wkt'].getAuthorityCode()
+            year = authorityCode.split(':')[0]
+            authority = authorityName+year
+            if filename is not sys.stdout:
+                
+                #fileToOutputOcentric.write("%s\n" % IAUCatalog.REFERENCES[authority])
+                #fileToOutputOgraphic.write("%s\n" % IAUCatalog.REFERENCES[authority])
+                #fileToOutputTriaxialOcentric.write("%s\n" % IAUCatalog.REFERENCES[authority])
+                #fileToOutputTriaxialOgraphic.write("%s\n" % IAUCatalog.REFERENCES[authority])
+                #fileToOutputOcentricProjected.write("%s\n" % IAUCatalog.REFERENCES[authority])
+                #fileToOutputOgraphicProjected.write("%s\n" % IAUCatalog.REFERENCES[authority])
+                #fileToOutputTriaxialOcentricProjected.write("%s\n" % IAUCatalog.REFERENCES[authority])
+                #fileToOutputTriaxialOgraphicProjected.write("%s\n" % IAUCatalog.REFERENCES[authority])
+
+
+                csvRecord = {}
+                for key in filesToOutput.keys():
+                    csvRecord[key] = []
+                for crs in crss:
+                    wktObj = crs['wkt']
+                    record = wktObj.getRecord()
+                    csvRecord[record['type']].append(record)
+                for crsType in filesToOutput.keys():
+                    writer = csv.DictWriter(filesToOutput[crsType], fieldnames=csvRecord[crsType][0].keys())
+                    writer.writeheader()
+                    for data in csvRecord[crsType]:
+                        writer.writerow(data)        
+
+            else:
+                fileToOutput.write("%s\n" % IAUCatalog.REFERENCES[authority])
+
+                for crs in crss:
+                    target=""
+                    wktObj = crs['wkt']
+                    if crs['target'] != target:
+                        fileToOutput.write("\n\n#%s WKT Codes for %s\n" % (wktObj.getAuthorityName(), crs['target']))
+                        target = crs['target']
+
+                    # Get the authority of the projection if it exists other this one from the datum
+                    fileToOutput.write("%s,%s\n\n" % (wktObj.getAuthorityCode(), wktObj.getWKT()))                
+
+
+        finally:
+            if filename is not sys.stdout:
+                for crsType in filesToOutput:                    
+                    filesToOutput[crsType].close()
+
 
     @staticmethod
     def saveAs(crss, filename=None, format="WKT"):
@@ -463,6 +536,8 @@ class IAUCatalog:
         """
         if format == "WKT":
             IAUCatalog.saveAsWKT(crss, filename)
+        elif format == "CSV":
+            IAUCatalog.saveAsCSV(crss, filename)
         else:
             raise Exception("Unknown output format")
 
@@ -545,7 +620,7 @@ def main(argv):
                                      )
     parser.add_argument('csv', metavar='csv_file', nargs=1, help='data from IAU as CSV file')
     parser.add_argument('--output', metavar='output', nargs=1, help="output file (default is stdout)")
-    parser.add_argument('--format', choices=['WKT'], help="output format (default is WKT)")
+    parser.add_argument('--format', choices=['WKT', 'CSV'], help="output format (default is WKT)")
     parser.add_argument('--verbose', choices=['OFF', 'INFO', 'DEBUG'],
                         help="R|select the verbose mode on stdout (INFO is default) where:\n"
                              " OFF : do not display error,\n"

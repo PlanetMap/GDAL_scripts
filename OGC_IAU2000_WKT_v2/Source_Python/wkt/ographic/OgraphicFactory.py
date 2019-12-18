@@ -84,7 +84,7 @@ class OgraphicFactory(object):
             planetaryOgraphicTriaxial.addRecord(TriaxialOgraphicMetadata.DATUM_NAME, "D_" + recordIAU.getElement(Metadata.BODY) + "_" + str(pubYear))
             planetaryOgraphicTriaxial.addRecord(TriaxialOgraphicMetadata.ELLIPSOIDE_NAME, recordIAU.getElement(Metadata.BODY) + "_" + str(pubYear) + "_" + authorityName)
             planetaryOgraphicTriaxial.addRecord(TriaxialOgraphicMetadata.AUTHORITY_NAME, authorityName)
-            planetaryOgraphicTriaxial.addRecord(TriaxialOgraphicMetadata.AUTHORITY_CODE, str(pubYear) + ":" + str(gisCode))
+            planetaryOgraphicTriaxial.addRecord(TriaxialOgraphicMetadata.AUTHORITY_CODE, "IAU:" + str(pubYear) + ":" + str(gisCode))
             planetaryOgraphicTriaxial.addRecord(TriaxialOgraphicMetadata.SEMI_MAJOR, float(recordIAU.getElement(Metadata.SEMI_MAJOR)))
             planetaryOgraphicTriaxial.addRecord(TriaxialOgraphicMetadata.SEMI_MINOR, float(recordIAU.getElement(Metadata.SEMI_MINOR)))
             planetaryOgraphicTriaxial.addRecord(TriaxialOgraphicMetadata.AXIS_B, float(recordIAU.getElement(Metadata.AXIS_B))) 
@@ -99,7 +99,7 @@ class OgraphicFactory(object):
             planetaryOgraphic.addRecord(OgraphicMetadata.RADIUS, float(recordIAU.getElement(Metadata.MEAN)))
             planetaryOgraphic.addRecord(OgraphicMetadata.INVERSE_FLATTENING, WKT.computeInverseFlattening(recordIAU.getElement(Metadata.SEMI_MAJOR), recordIAU.getElement(Metadata.SEMI_MINOR)))
             planetaryOgraphic.addRecord(OgraphicMetadata.AUTHORITY_NAME, authorityName)
-            planetaryOgraphic.addRecord(OgraphicMetadata.AUTHORITY_CODE, str(pubYear) + ":" + str(gisCode))
+            planetaryOgraphic.addRecord(OgraphicMetadata.AUTHORITY_CODE, "IAU:" + str(pubYear) + ":" + str(gisCode))
             planetaryOgraphic.addRecord(OgraphicMetadata.LONGITUDE_ORDER, WKT.getLongitudeOrderFromRotation(recordIAU.getElement(Metadata.ROTATION)))
             result = OgraphicWKT(planetaryOgraphic) 
 

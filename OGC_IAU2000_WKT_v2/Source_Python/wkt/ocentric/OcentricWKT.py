@@ -12,8 +12,8 @@ class OcentricMetadata(Enum):
     INVERSE_FLATTENING = "inverseFlattening"
     AUTHORITY_NAME = "authorityName"
     AUTHORITY_CODE = "authorityCode"
-    CITATION = "citation"    
-
+    CITATION = "citation"  
+    LONGITUDE_ORDER = "longitudeOrder"
 
 class OcentricWKT(WKT) :
     """
@@ -80,7 +80,7 @@ class OcentricWKT(WKT) :
 
     def getWKT(self):
         """
-        Returns the CRS based on longitude/latitude
+        Returns the WKT format 
 
         :return: the WKT
         :rtype: str
@@ -95,4 +95,29 @@ class OcentricWKT(WKT) :
 
         logger.debug("Exiting from ocentricWKT.getWkt")
         return wkt 
+
+    def getRecord(self):
+        """
+        Returns the record format 
+
+        :return: the WKT
+        :rtype: str
+         """
+        logger.debug("Entering in ocentricWKT.getRecord")
+
+
+        record = {
+            'type':'OCENTRIC',            
+            OcentricMetadata.GEO_GCS_NAME.value: self.getGeoGcsName(),
+            OcentricMetadata.DATUM_NAME.value: self.getDatumName(),
+            OcentricMetadata.ELLIPSOIDE_NAME.value: self.getSpheroidName(),
+            OcentricMetadata.RADIUS.value: self.getRadius(),
+            OcentricMetadata.INVERSE_FLATTENING.value: self.getInverseFlattening(),
+            OcentricMetadata.AUTHORITY_NAME.value: self.getAuthorityName(),
+            OcentricMetadata.AUTHORITY_CODE.value: self.getAuthorityCode(),            
+            OcentricMetadata.LONGITUDE_ORDER.value: "East"
+        }
+
+        logger.debug("Exiting from ocentricWKT.getRecord")
+        return record         
         

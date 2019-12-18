@@ -389,4 +389,23 @@ class ProjectedWKT(WKT) :
         )
 
         logger.debug("Exiting from projectedWKT.getWKT")
-        return wkt      
+        return wkt   
+
+    def getRecord(self):
+        """
+        Returns the Record format 
+
+        :return: the WKT
+        :rtype: str
+         """
+        logger.debug("Entering in ocentricWKT.getRecord")
+
+        record = self.__planetWKT.getRecord()
+        record[ProjectedMetadata.PROJECTION_NAME] = self.getProjectionName()
+        record[ProjectedMetadata.PROJECTION_ENUM] = self.getProjectionEnum().name
+        record[ProjectedMetadata.AUTHORITY_CODE] = self.getAuthorityCode()
+        record[ProjectedMetadata.AUTHORITY_NAME] = self.getAuthorityName()
+        record['type'] = record['type']+"_PROJECTED"
+
+        logger.debug("Exiting from ocentricWKT.getRecord")
+        return record             
